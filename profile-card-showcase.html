@@ -1,0 +1,416 @@
+
+<!-- 
+================================================================
+FILE NAME:       profile-card-showcase.html
+PROJECT NAME:    Profile Card Generator
+VERSION:         2.0 (Showcase Edition)
+DESCRIPTION:     Profile card tool with large presentation header
+USAGE:           GitHub Portfolio / Behance Case Study
+DATE:            2026
+================================================================
+-->
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Profile Card Generator</title>
+  <style>
+    /* Основные переменные (Telegram Blue theme) */
+    :root {
+      --bg-app: #0f172a;
+      --surface-panel: #1e293b;
+      --text-main: #f1f5f9;
+      --text-sub: #94a3b8;
+      --navy: #1a2744;
+      --telegram-blue: #2AABEE; /* Фирменный цвет */
+      --card-bg: #ffffff;
+      --card-text: #1a2744;
+      --card-text-sub: #3a5078;
+      --radius-lg: 20px;
+      --radius-sm: 8px;
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    
+    body {
+      font-family: 'Inter', 'Segoe UI', system-ui, sans-serif;
+      background: var(--bg-app);
+      color: var(--text-main);
+      min-height: 100vh;
+      display: flex;
+    }
+
+    /* Панель управления */
+    .sidebar {
+      width: 320px;
+      background: var(--surface-panel);
+      padding: 24px;
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+      border-right: 1px solid rgba(255,255,255,0.1);
+      z-index: 20;
+    }
+
+    .brand {
+      font-size: 1.3rem;
+      font-weight: 700;
+      color: var(--text-main);
+      margin-bottom: 8px;
+    }
+
+    .control-group { display: flex; flex-direction: column; gap: 6px; }
+    
+    label {
+      font-size: 0.75rem;
+      color: var(--text-sub);
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      font-weight: 600;
+    }
+
+    input[type="text"], input[type="email"], input[type="tel"] {
+      background: rgba(0,0,0,0.2);
+      border: 1px solid rgba(255,255,255,0.1);
+      color: white;
+      padding: 10px 12px;
+      border-radius: var(--radius-sm);
+      font-size: 0.9rem;
+    }
+    input:focus { border-color: var(--telegram-blue); outline: none; }
+
+    input[type="file"] { color: var(--text-sub); font-size: 0.85rem; }
+
+    .btn {
+      padding: 12px;
+      background: var(--telegram-blue);
+      color: #fff;
+      border: none;
+      border-radius: var(--radius-sm);
+      font-weight: 600;
+      cursor: pointer;
+      margin-top: 8px;
+      transition: 0.2s;
+    }
+    .btn:hover { opacity: 0.85; transform: translateY(-1px); }
+
+    .btn-secondary {
+      background: transparent;
+      border: 1px solid #555;
+      color: #aaa;
+    }
+
+    /* Область предпросмотра */
+    .preview {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      background: linear-gradient(135deg, #334155 0%, #1e293b 100%);
+      padding: 40px;
+      position: relative;
+    }
+
+    /* Заголовок продукта (КРУПНЫЙ БЕЛЫЙ) */
+    .preview-header {
+      position: absolute;
+      top: 60px;
+      left: 0;
+      right: 0;
+      text-align: center;
+      z-index: 10;
+    }
+
+    .preview-title {
+      font-size: 3.2rem;
+      font-weight: 800;
+      color: #ffffff;
+      letter-spacing: -1px;
+      text-shadow: 0 4px 20px rgba(0,0,0,0.4);
+      margin: 0;
+      line-height: 1;
+    }
+
+    .preview-subtitle {
+      font-size: 1.1rem;
+      color: var(--text-sub);
+      margin-top: 12px;
+      font-weight: 400;
+      letter-spacing: 0.5px;
+    }
+
+    /* Сама Карточка */
+    .card {
+      width: 480px;
+      background: var(--card-bg);
+      border-radius: var(--radius-lg);
+      padding: 56px 48px;
+      text-align: center;
+      box-shadow: 0 30px 100px rgba(0,0,0,0.5);
+      border: 1px solid rgba(255,255,255,0.05);
+      margin-top: 100px; /* Отступ от заголовка */
+      position: relative;
+      z-index: 5;
+    }
+
+    .avatar {
+      width: 140px;
+      height: 140px;
+      border-radius: 50%;
+      margin: 0 auto 36px;
+      overflow: hidden;
+      border: 5px solid var(--telegram-blue); /* Телеграм-обводка */
+      background: #e2e8f0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 3.5rem;
+    }
+    .avatar img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+
+    .name {
+      font-size: 2.4rem;
+      font-weight: 800;
+      margin-bottom: 14px;
+      color: var(--navy);
+      letter-spacing: -0.5px;
+      line-height: 1.1;
+    }
+
+    .role {
+      color: var(--telegram-blue); /* Телеграм-цвет */
+      font-size: 1.15rem;
+      font-weight: 700;
+      margin-bottom: 28px;
+      text-transform: uppercase;
+      letter-spacing: 3px;
+    }
+
+    .bio {
+      color: var(--card-text-sub);
+      font-size: 1.15rem;
+      line-height: 1.65;
+      margin-bottom: 36px;
+      max-width: 85%;
+      margin-left: auto;
+      margin-right: auto;
+      font-weight: 600;
+    }
+
+    .contacts {
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+      padding-top: 28px;
+      border-top: 3px solid var(--navy);
+    }
+
+    .contact-item {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      color: var(--navy);
+      font-size: 1rem;
+      text-decoration: none;
+      transition: 0.2s;
+      font-weight: 700;
+    }
+    .contact-item:hover { 
+      opacity: 0.6;
+      transform: translateX(4px);
+    }
+
+    /* Индикатор загрузки */
+    .loading {
+      position: fixed;
+      top: 50%; left: 50%;
+      transform: translate(-50%, -50%);
+      background: rgba(0,0,0,0.9);
+      color: white;
+      padding: 20px 30px;
+      border-radius: var(--radius-sm);
+      display: none;
+      z-index: 1000;
+      font-weight: 600;
+    }
+
+    /* Адаптивность */
+    @media (max-width: 900px) {
+      body { flex-direction: column; }
+      .sidebar { width: 100%; border-right: none; border-bottom: 1px solid rgba(255,255,255,0.1); }
+      .preview { min-height: 700px; }
+      .preview-title { font-size: 2rem; }
+      .card { width: 90%; margin-top: 120px; padding: 40px 24px; }
+      .name { font-size: 1.8rem; }
+    }
+  </style>
+</head>
+<body>
+
+  <aside class="sidebar">
+    <div class="brand">Profile Card Generator</div>
+    
+    <div class="control-group">
+      <label>Full Name</label>
+      <input type="text" id="inpName" value="Anna Petrova">
+    </div>
+    
+    <div class="control-group">
+      <label>Job Title</label>
+      <input type="text" id="inpRole" value="Product Designer">
+    </div>
+
+    <div class="control-group">
+      <label>Bio</label>
+      <input type="text" id="inpBio" value="Creating digital products with focus on ethics and aesthetics">
+    </div>
+
+    <div class="control-group">
+      <label>Photo</label>
+      <input type="file" id="inpAvatar" accept="image/*">
+    </div>
+
+    <div class="control-group">
+      <label> Email</label>
+      <input type="email" id="inpEmail" placeholder="anna@example.com">
+    </div>
+
+    <div class="control-group">
+      <label> Phone</label>
+      <input type="tel" id="inpPhone" placeholder="+1 234 567 890">
+    </div>
+
+    <div class="control-group">
+      <label>🌐 Website</label>
+      <input type="text" id="inpWebsite" placeholder="annapetrova.design">
+    </div>
+
+    <button class="btn" onclick="downloadCard()">️ Download PNG</button>
+    <button class="btn btn-secondary" onclick="window.print()">️ Print / PDF</button>
+  </aside>
+
+  <main class="preview">
+    <!-- НАЗВАНИЕ ПРОДУКТА (КРУПНОЕ) -->
+    <div class="preview-header">
+      <h1 class="preview-title">Profile Card Generator</h1>
+      <p class="preview-subtitle">Create your professional digital identity</p>
+    </div>
+    
+    <div class="card" id="card">
+      <div class="avatar" id="avatarBox"></div>
+      <div class="name" id="outName">Anna Petrova</div>
+      <div class="role" id="outRole">PRODUCT DESIGNER</div>
+      <div class="bio" id="outBio">Creating digital products with focus on ethics and aesthetics</div>
+      
+      <div class="contacts" id="contactsBox"></div>
+    </div>
+  </main>
+
+  <div class="loading" id="loading">Generating PNG...</div>
+
+  <!-- Библиотека для экспорта -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+  
+  <script>
+    // Элементы интерфейса
+    const els = {
+      name: document.getElementById('inpName'),
+      role: document.getElementById('inpRole'),
+      bio: document.getElementById('inpBio'),
+      email: document.getElementById('inpEmail'),
+      phone: document.getElementById('inpPhone'),
+      website: document.getElementById('inpWebsite'),
+      avatar: document.getElementById('inpAvatar'),
+      
+      outName: document.getElementById('outName'),
+      outRole: document.getElementById('outRole'),
+      outBio: document.getElementById('outBio'),
+      avatarBox: document.getElementById('avatarBox'),
+      contactsBox: document.getElementById('contactsBox'),
+      loading: document.getElementById('loading')
+    };
+
+    // Обновление текста в реальном времени
+    els.name.addEventListener('input', e => els.outName.innerText = e.target.value);
+    els.role.addEventListener('input', e => els.outRole.innerText = e.target.value);
+    els.bio.addEventListener('input', e => els.outBio.innerText = e.target.value);
+
+    // Обновление контактов (только если поле заполнено)
+    function updateContacts() {
+      const contacts = [];
+      if (els.email.value) contacts.push({ icon: '📧', text: els.email.value, type: 'email' });
+      if (els.phone.value) contacts.push({ icon: '📱', text: els.phone.value, type: 'tel' });
+      if (els.website.value) contacts.push({ icon: '🌐', text: els.website.value, type: 'url' });
+
+      if (contacts.length === 0) {
+        els.contactsBox.style.display = 'none';
+      } else {
+        els.contactsBox.style.display = 'flex';
+        els.contactsBox.innerHTML = contacts.map(c => `
+          <a href="${c.type === 'email' ? 'mailto:' : c.type === 'tel' ? 'tel:' : 'https://'}${c.text}" 
+             class="contact-item" target="_blank">
+            <span>${c.icon}</span>
+            <span>${c.text}</span>
+          </a>
+        `).join('');
+      }
+    }
+
+    els.email.addEventListener('input', updateContacts);
+    els.phone.addEventListener('input', updateContacts);
+    els.website.addEventListener('input', updateContacts);
+
+    // Загрузка аватара
+    els.avatar.addEventListener('change', e => {
+      const file = e.target.files[0];
+      if (!file) return;
+      const reader = new FileReader();
+      reader.onload = ev => {
+        els.avatarBox.innerHTML = `<img src="${ev.target.result}">`;
+      };
+      reader.readAsDataURL(file);
+    });
+
+    // Функция скачивания (Export)
+    async function downloadCard() {
+      if (typeof html2canvas === 'undefined') {
+        alert('Library is loading... Please wait and try again.');
+        return;
+      }
+
+      els.loading.style.display = 'block';
+      
+      try {
+        const canvas = await html2canvas(document.getElementById('card'), {
+          backgroundColor: '#ffffff',
+          scale: 2,
+          useCORS: true,
+          logging: false,
+          width: 480,
+          height: document.getElementById('card').offsetHeight
+        });
+
+        const link = document.createElement('a');
+        link.download = 'profile-card.png';
+        link.href = canvas.toDataURL('image/png');
+        link.click();
+      } catch (error) {
+        alert('Error generating image. Try screenshot instead.');
+      } finally {
+        els.loading.style.display = 'none';
+      }
+    }
+
+    // Инициализация
+    updateContacts();
+  </script>
+</body>
+</html>
